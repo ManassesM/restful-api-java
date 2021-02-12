@@ -37,12 +37,7 @@ public class TestConfig  implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-		User u1 = new User(null, "Mary Brown", "mary@email.com", "999888777", "123456");
-		User u2 = new User(null, "Bob Wallet", "bob@email.com", "888777666", "123456");
-
-		Order o1 = new Order(null, Instant.parse("2021-02-12T14:41:07Z"), OrderStatus.PAID, u1);
-		Order o2 = new Order(null, Instant.parse("2021-01-12T14:10:07Z"), OrderStatus.WAITING_PAYMENT, u2);
-		Order o3 = new Order(null, Instant.parse("2021-02-12T14:22:07Z"), OrderStatus.WAITING_PAYMENT, u1);
+		// Category and Product
 		
 		Category cat1 = new Category(null, "Electronics");
 		Category cat2 = new Category(null, "Books");
@@ -53,11 +48,36 @@ public class TestConfig  implements CommandLineRunner{
 		Product p3 = new Product(null, "Macbook Pro", "Nam eleifend maximus tortor, at mollis.", 1250.0, "");
 		Product p4 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, "");
 		Product p5 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "");
+
+		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
+		
+		p1.getCategories().add(cat2);
+		p2.getCategories().add(cat1);
+		p2.getCategories().add(cat3);
+		p3.getCategories().add(cat3);
+		p4.getCategories().add(cat3);
+		p5.getCategories().add(cat2);
+
+		/*
+		cat1.getProducts().addAll(Arrays.asList(p2));
+		cat2.getProducts().addAll(Arrays.asList(p1, p5));
+		cat3.getProducts().addAll(Arrays.asList(p1, p3, p4));
+		*/
+		
+		// User and Repository
+		
+		User u1 = new User(null, "Mary Brown", "mary@email.com", "999888777", "123456");
+		User u2 = new User(null, "Bob Wallet", "bob@email.com", "888777666", "123456");
+
+		Order o1 = new Order(null, Instant.parse("2021-02-12T14:41:07Z"), OrderStatus.PAID, u1);
+		Order o2 = new Order(null, Instant.parse("2021-01-12T14:10:07Z"), OrderStatus.WAITING_PAYMENT, u2);
+		Order o3 = new Order(null, Instant.parse("2021-02-12T14:22:07Z"), OrderStatus.WAITING_PAYMENT, u1);
 		
 		userRepository.saveAll(Arrays.asList(u1, u2));
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
-		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
-		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
+		
+
 		
 	}
 }
